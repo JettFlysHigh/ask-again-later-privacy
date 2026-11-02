@@ -37,10 +37,13 @@
     open or share other files with it.</p>
   <p>In practice, the backup tool only works with its own designated backup files and folders. It:</p>
   <ul>
-    <li>creates two folders, <em>Ask Again Later</em> and inside it <em>Final Videos</em>;</li>
+    <li>creates its backup folders, <em>Ask Again Later</em> › <em>YouTube Shorts</em> › <em>Final Videos</em>, if they
+      don't already exist;</li>
     <li>uploads finished MP4 video files into <em>Final Videos</em>;</li>
-    <li>looks up its own files in that folder (name, file ID, size and checksums) to avoid duplicate uploads and to
-      confirm each upload arrived complete.</li>
+    <li>looks up its own files and folders (name, file ID, size, checksums and folder) to avoid duplicate uploads and to
+      confirm each upload arrived complete;</li>
+    <li>when its folder layout changes, can move its own backup files into the new folders. This changes only the
+      folder a file is in; the file is not copied, re-uploaded or deleted.</li>
   </ul>
   <p>The app does not request or read your name, email address, contacts or any other Google account data, and it
     does not use any YouTube permission.</p>
