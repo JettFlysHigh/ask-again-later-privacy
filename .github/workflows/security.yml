@@ -1,0 +1,103 @@
+# Security scan for this public repository: secrets (Gitleaks, current files + full history), file allowlist and
+# content policy. Read-only token, no secrets used, untrusted pull-request code runs only with read access
+# (pull_request, never pull_request_target). Findings are fully redacted: only rule, file and line are printed.
+name: Security scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "37 5 * * *"     # daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-scan:
+    name: security-scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GITLEAKS_VERSION: "8.30.1"
+      GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"   # official checksums file
+    steps:
+      - name: Check out (full history, no stored credentials)
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09   # v5.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install Gitleaks (pinned version, checksum-verified)
+        run: |
+          set -euo pipefail
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tgz" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/gl"
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP/gl" gitleaks
+          "$RUNNER_TEMP/gl/gitleaks" version
+          printf '[extend]\nuseDefault = true\n' > "$RUNNER_TEMP/builtin.toml"   # built-in rules only
+
+      - name: Self-test - synthetic credentials are detected and never printed
+        run: |
+          set -euo pipefail
+          GL="$RUNNER_TEMP/gl/gitleaks"; T="$RUNNER_TEMP/selftest"; mkdir -p "$T"
+          rnd() { local s; s=$(LC_ALL=C tr -dc "$1" < <(head -c 4000 /dev/urandom)); printf '%s' "${s:0:$2}"; }
+          # Random, syntactically valid-looking but fake values; generated here, never committed or echoed.
+          V1="GOCSPX-$(rnd 'A-Za-z0-9' 28)"; V2="ya29.$(rnd 'A-Za-z0-9' 40)"; V3="1//0$(rnd 'A-Za-z0-9' 40)"
+          V4="ghp_$(rnd 'A-Za-z0-9' 36)"; V5="AKIA$(rnd 'A-Z2-7' 16)"
+          printf 'a = "%s"\nb = "%s"\nc = "%s"\nd = "%s"\ne = "%s"\n' "$V1" "$V2" "$V3" "$V4" "$V5" > "$T/synthetic.txt"
+          set +e
+          "$GL" dir "$T" --config .gitleaks.toml --redact=100 --no-banner --no-color --exit-code 9 \
+            --report-format json --report-path "$T/report.json" > "$T/out.log" 2>&1
+          code=$?
+          set -e
+          [ "$code" -eq 9 ] || { echo "::error::self-test: Gitleaks did not flag the synthetic credentials (exit $code)"; exit 1; }
+          found=$(jq -r '[.[].RuleID] | unique | join(",")' "$T/report.json")
+          for r in google-oauth-client-secret google-oauth-access-token google-oauth-refresh-token github-pat aws-access-token; do
+            case ",$found," in *",$r,"*) ;; *) echo "::error::self-test: rule $r did not fire"; exit 1;; esac
+          done
+          for v in "$V1" "$V2" "$V3" "$V4" "$V5"; do
+            if grep -qF -- "$v" "$T/out.log" "$T/report.json"; then echo "::error::self-test: a value was not redacted"; exit 1; fi
+          done
+          # unauthorized-file rejection
+          git init -q "$T/repo"; cp index.html "$T/repo/"; echo x > "$T/repo/unapproved.txt"
+          git -C "$T/repo" add -A
+          if bash .github/scripts/policy-check.sh "$T/repo" > "$T/policy.log" 2>&1; then
+            echo "::error::self-test: policy check accepted an unapproved file"; exit 1
+          fi
+          grep -q "Unapproved file" "$T/policy.log" || { echo "::error::self-test: unexpected policy failure"; exit 1; }
+          rm -rf "$T"
+          echo "Self-test passed: rules fired ($found), values redacted, unapproved file rejected"
+
+      - name: Secret scan - current files
+        run: |
+          set -euo pipefail
+          GL="$RUNNER_TEMP/gl/gitleaks"; rc=0
+          for cfg in "$RUNNER_TEMP/builtin.toml" .gitleaks.toml; do
+            "$GL" dir . --config "$cfg" --redact=100 --no-banner --no-color --exit-code 1 \
+              --report-format json --report-path "$RUNNER_TEMP/dir.json" > /dev/null 2>&1 || rc=1
+            jq -r '.[] | "::error file=\(.File),line=\(.StartLine)::Gitleaks rule \(.RuleID) (value redacted)"' "$RUNNER_TEMP/dir.json"
+          done
+          [ "$rc" -eq 0 ] && echo "No secrets found in the current files" || exit 1
+
+      - name: Secret scan - full Git history (all fetched refs)
+        run: |
+          set -euo pipefail
+          GL="$RUNNER_TEMP/gl/gitleaks"; rc=0
+          for cfg in "$RUNNER_TEMP/builtin.toml" .gitleaks.toml; do
+            "$GL" git . --log-opts="--all" --config "$cfg" --redact=100 --no-banner --no-color --exit-code 1 \
+              --report-format json --report-path "$RUNNER_TEMP/git.json" > /dev/null 2>&1 || rc=1
+            jq -r '.[] | "::error file=\(.File),line=\(.StartLine)::Gitleaks rule \(.RuleID) in commit \(.Commit[0:12]) (value redacted)"' "$RUNNER_TEMP/git.json"
+          done
+          [ "$rc" -eq 0 ] && echo "No secrets found in the Git history" || exit 1
+
+      - name: Repository policy - approved files and published content
+        run: bash .github/scripts/policy-check.sh .
