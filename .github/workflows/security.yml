@@ -29,7 +29,7 @@ jobs:
       GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"   # official checksums file
     steps:
       - name: Check out (full history, no stored credentials)
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5   # v4.3.1
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09   # v5.1.0
         with:
           fetch-depth: 0
           persist-credentials: false
