@@ -1,0 +1,1 @@
+Harmless test file for the ruleset check. Not on the approved-file list on purpose; this PR will be closed.
