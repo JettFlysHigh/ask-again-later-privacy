@@ -57,13 +57,14 @@
       or deletes an existing video, and never posts comments.</li>
     <li><code>youtube.readonly</code> ("view your YouTube account"): the app reads the signed-in channel's ID and name
       to confirm it is the Ask Again Later channel before doing anything, reads the status and details of the channel's
-      own uploads (for example whether an upload is private and finished processing), and reads the channel's own
-      YouTube Analytics reports for its published videos – views, engaged views, watch time, average view duration
+      own uploads (for example whether an upload is private and finished processing), and, where Google accepts this
+      permission for it, reads the channel's own YouTube Analytics reports for its published videos – views, engaged views, watch time, average view duration
       and percentage, likes, comments and shares counts, subscribers gained or lost, traffic-source totals and
       audience-retention curves. These are aggregate numbers; the app does not receive information about individual
       viewers.</li>
   </ul>
-  <p>The app does not request or read your name, email address, contacts or any other Google account data.</p>
+  <p>The app does not request permission to upload captions, edit or delete videos, manage comments or read any other
+    Google service. It does not request or read your name, email address, contacts or any other Google account data.</p>
 
   <h2>How the information is used</h2>
   <p>Only to store and verify backups of the channel's own videos, to upload the channel's own approved videos as
@@ -86,6 +87,14 @@
       cover, in the same private repository. They are kept to compare the channel's videos over time.</li>
     <li><strong>The videos themselves</strong> are stored in the owner's Google Drive and on the owner's YouTube
       channel.</li>
+  </ul>
+
+  <h2>How long data is kept</h2>
+  <ul>
+    <li><strong>Sign-in credentials</strong> are kept only for the working session that needs them and stop working
+      when access is removed (see below); test-mode sign-ins also expire on their own after about a week.</li>
+    <li><strong>Backup, upload and statistics records</strong> are kept in the private repository for as long as the
+      channel's production history is kept; the owner can delete them at any time.</li>
   </ul>
 
   <h2>Service providers and sharing</h2>
