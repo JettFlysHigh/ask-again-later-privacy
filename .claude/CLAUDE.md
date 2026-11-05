@@ -1,11 +1,12 @@
 # Ask Again Later – Studio privacy policy (public repository)
 
 This repository is PUBLIC. It publishes one page with GitHub Pages: `index.html`, the privacy policy for the channel
-owner's personal Google Drive backup tool (Google OAuth scope `drive.file`). Everything committed here, including the
+owner's personal tool: Google Drive backups (Google OAuth scope `drive.file`) and private YouTube uploads plus the
+channel's own analytics (scopes `youtube.upload` and `youtube.readonly`). Everything committed here, including the
 Git history, is visible to anyone.
 
 ## What may be published
-- Only what is needed to explain the app's Google Drive access, data handling, storage, sharing and the user's rights
+- Only what is needed to explain the app's Google Drive and YouTube access, data handling, storage, sharing and the user's rights
   (revoking access, deleting data), plus the approved public contact address askagainlater.studio@gmail.com.
 - Approved files only (the allowlist lives in `.github/scripts/policy-check.sh`): the page, these instructions, the
   Gitleaks configuration, the security workflow and its policy script. A new file needs the owner's approval and an

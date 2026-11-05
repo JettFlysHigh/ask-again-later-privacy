@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy – Ask Again Later Studio</title>
-<meta name="description" content="Privacy policy for Ask Again Later – Studio, a personal Google Drive backup tool for the Ask Again Later YouTube channel.">
+<meta name="description" content="Privacy policy for Ask Again Later – Studio, a personal tool that backs up and privately uploads the Ask Again Later channel's own videos and reads its own channel analytics.">
 <style>
   :root { --bg: #fffdf7; --text: #1d1d1f; --muted: #5b5b66; --accent: #e5484d; --line: #e6e1d6; }
   @media (prefers-color-scheme: dark) { :root { --bg: #15161a; --text: #ececf0; --muted: #a3a3ad; --accent: #ff6b6f; --line: #2c2d33; } }
@@ -12,6 +12,7 @@
   body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
   h1 { font-size: 1.8rem; line-height: 1.2; margin: 0 0 4px; }
+  h3 { font-size: 1rem; margin: 18px 0 6px; }
   h2 { font-size: 1.15rem; margin: 32px 0 8px; padding-top: 16px; border-top: 1px solid var(--line); }
   p, li { margin: 0 0 10px; }
   ul { padding-left: 1.2em; }
@@ -23,15 +24,17 @@
 <body>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="muted">Ask Again Later – Studio · Last updated 2 November 2026</p>
+  <p class="muted">Ask Again Later – Studio · Last updated 5 November 2026</p>
 
   <p><strong>Ask Again Later – Studio</strong> is a small personal tool used by the creator of the
     <a href="https://youtube.com/@askagainlatershow">Ask Again Later</a> YouTube channel. It backs up the channel's
-    finished video files to the creator's own Google Drive. It is not a public app: it has no user accounts, no sign-up,
+    finished video files to the creator's own Google Drive, uploads the channel's own finished videos to YouTube as
+    <strong>private</strong> videos, and reads the channel's own YouTube statistics. It is not a public app: it has no user accounts, no sign-up,
     and it is used only by the channel's owner with their own Google account.</p>
 
   <h2>What Google data the app accesses</h2>
-  <p>The app asks Google for one permission: <code>drive.file</code> ("see, edit, create and delete only the specific
+  <h3>Google Drive</h3>
+  <p>For backups the app asks Google for one Drive permission: <code>drive.file</code> ("see, edit, create and delete only the specific
     Google Drive files you use with this app"). Under Google's rules, this permission covers files and folders the app
     creates, plus files a user explicitly opens or shares with the app. This app has no file picker and never asks you to
     open or share other files with it.</p>
@@ -45,12 +48,28 @@
     <li>when its folder layout changes, can move its own backup files into the new folders. This changes only the
       folder a file is in; the file is not copied, re-uploaded or deleted.</li>
   </ul>
-  <p>The app does not request or read your name, email address, contacts or any other Google account data, and it
-    does not use any YouTube permission.</p>
+  <h3>YouTube</h3>
+  <p>For publishing and statistics the app asks Google for two YouTube permissions, granted in a separate sign-in:</p>
+  <ul>
+    <li><code>youtube.upload</code> ("manage your YouTube videos" – upload only): the app uses it only to upload a
+      finished video of the channel that the owner has approved, always as a <strong>private</strong> video, and to
+      set that private video's thumbnail. It never makes a video public, never schedules one, never edits, replaces
+      or deletes an existing video, and never posts comments.</li>
+    <li><code>youtube.readonly</code> ("view your YouTube account"): the app reads the signed-in channel's ID and name
+      to confirm it is the Ask Again Later channel before doing anything, reads the status and details of the channel's
+      own uploads (for example whether an upload is private and finished processing), and reads the channel's own
+      YouTube Analytics reports for its published videos – views, engaged views, watch time, average view duration
+      and percentage, likes, comments and shares counts, subscribers gained or lost, traffic-source totals and
+      audience-retention curves. These are aggregate numbers; the app does not receive information about individual
+      viewers.</li>
+  </ul>
+  <p>The app does not request or read your name, email address, contacts or any other Google account data.</p>
 
   <h2>How the information is used</h2>
-  <p>Only to store and verify backups of the channel's own videos. The app does not delete or overwrite files in Google
-    Drive.</p>
+  <p>Only to store and verify backups of the channel's own videos, to upload the channel's own approved videos as
+    private videos and check that they arrived with the approved settings, and to measure how the channel's own
+    published videos perform so the owner can make better videos. The app does not delete or overwrite files in Google
+    Drive, and it does not delete or change existing YouTube videos.</p>
 
   <h2>What is stored, and where</h2>
   <ul>
@@ -60,18 +79,28 @@
     <li><strong>Backup records:</strong> for each uploaded video the tool records the Drive file ID, file name, folder
       name, file size, a SHA-256 checksum, the backup status and the date. These records are kept in the channel's
       private production repository on GitHub.</li>
-    <li><strong>The videos themselves</strong> are stored in the owner's Google Drive.</li>
+    <li><strong>Upload records:</strong> for each private upload the tool records the YouTube video ID, title, privacy
+      status, a SHA-256 checksum of the uploaded file, the processing status and the date, in the same private
+      repository.</li>
+    <li><strong>Statistics:</strong> the channel's own YouTube Analytics figures listed above, with the date range they
+      cover, in the same private repository. They are kept to compare the channel's videos over time.</li>
+    <li><strong>The videos themselves</strong> are stored in the owner's Google Drive and on the owner's YouTube
+      channel.</li>
   </ul>
 
   <h2>Service providers and sharing</h2>
-  <p>The tool sends video files and backup requests to Google's APIs to perform the backup. It is operated by the owner
-    through Claude Code, an AI coding assistant, so backup metadata (file names, Drive file IDs and backup status) is
-    processed by Claude Code and can appear in the owner's session history with that service. The backup records are
-    stored in the channel's private GitHub repository. Sign-in credentials are not displayed in that output.</p>
+  <p>The tool sends video files, backup requests, upload requests and statistics requests only to Google's APIs. It is
+    operated by the owner through Claude Code, an AI coding assistant, so backup and upload metadata (file names, Drive
+    file IDs, YouTube video IDs and status) and the channel's statistics are processed by Claude Code and can appear in
+    the owner's session history with that service. The records are stored in the channel's private GitHub repository.
+    Sign-in credentials are not displayed in that output.</p>
   <p>The tool does not sell this data and does not use it for advertising.</p>
   <p>The app's use of information received from Google APIs adheres to the
     <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
     including the Limited Use requirements.</p>
+  <p>The app uses YouTube API Services. By using it, the owner agrees to the
+    <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>; Google's handling of data is described in
+    the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
 
   <h2>How to revoke access or delete data</h2>
   <ul>
@@ -79,7 +108,7 @@
       <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a> → select
       <em>Ask Again Later – Studio</em> → remove its access. Any stored credentials then stop working.</li>
     <li>Delete the locally stored authentication credentials on the computer or environment that ran the tool.</li>
-    <li>Delete the backed-up videos or folders directly in Google Drive.</li>
+    <li>Delete the backed-up videos or folders directly in Google Drive, and the uploaded videos in YouTube Studio.</li>
   </ul>
 
   <h2>Changes and contact</h2>
