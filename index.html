@@ -24,7 +24,7 @@
 <body>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="muted">Ask Again Later – Studio · Last updated 5 November 2026</p>
+  <p class="muted">Ask Again Later – Studio · Last updated 6 November 2026</p>
 
   <p><strong>Ask Again Later – Studio</strong> is a small personal tool used by the creator of the
     <a href="https://youtube.com/@askagainlatershow">Ask Again Later</a> YouTube channel. It backs up the channel's
@@ -76,7 +76,9 @@
   <ul>
     <li><strong>Sign-in credentials:</strong> after the owner signs in, Google issues an authorisation token. It is
       stored privately on the computer or development environment that runs the tool, and is never published or put in
-      source code.</li>
+      source code. For the daily statistics refresh, a separate token limited to the read-only permission
+      (youtube.readonly) is stored as an encrypted secret of the private repository's automation (GitHub Actions); that
+      automated job only reads the channel's own statistics and cannot upload, change or delete videos.</li>
     <li><strong>Backup records:</strong> for each uploaded video the tool records the Drive file ID, file name, folder
       name, file size, a SHA-256 checksum, the backup status and the date. These records are kept in the channel's
       private production repository on GitHub.</li>
@@ -92,7 +94,9 @@
   <h2>How long data is kept</h2>
   <ul>
     <li><strong>Sign-in credentials</strong> are kept only for the working session that needs them and stop working
-      when access is removed (see below); test-mode sign-ins also expire on their own after about a week.</li>
+      when access is removed (see below); test-mode sign-ins also expire on their own after about a week. The read-only
+      token for the daily statistics refresh is kept until the owner replaces or deletes it, or removes the app's
+      access.</li>
     <li><strong>Backup, upload and statistics records</strong> are kept in the private repository for as long as the
       channel's production history is kept; the owner can delete them at any time.</li>
   </ul>
@@ -102,7 +106,8 @@
     operated by the owner through Claude Code, an AI coding assistant, so backup and upload metadata (file names, Drive
     file IDs, YouTube video IDs and status) and the channel's statistics are processed by Claude Code and can appear in
     the owner's session history with that service. The records are stored in the channel's private GitHub repository.
-    Sign-in credentials are not displayed in that output.</p>
+    The daily statistics refresh runs on GitHub's servers (GitHub Actions) and saves its results in that same private
+    repository. Sign-in credentials are not displayed in that output.</p>
   <p>The tool does not sell this data and does not use it for advertising.</p>
   <p>The app's use of information received from Google APIs adheres to the
     <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
@@ -116,7 +121,8 @@
     <li>Remove the app's access at any time in your Google Account:
       <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a> → select
       <em>Ask Again Later – Studio</em> → remove its access. Any stored credentials then stop working.</li>
-    <li>Delete the locally stored authentication credentials on the computer or environment that ran the tool.</li>
+    <li>Delete the locally stored authentication credentials on the computer or environment that ran the tool, and the
+      read-only token stored as a secret in the private repository's GitHub Actions settings.</li>
     <li>Delete the backed-up videos or folders directly in Google Drive, and the uploaded videos in YouTube Studio.</li>
   </ul>
 
