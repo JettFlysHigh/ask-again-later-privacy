@@ -40,10 +40,11 @@
     open or share other files with it.</p>
   <p>In practice, the backup tool only works with its own designated backup files and folders. It:</p>
   <ul>
-    <li>creates its backup folders, <em>Ask Again Later</em> › <em>YouTube Shorts</em> › <em>Final Videos</em>, if they
-      don't already exist;</li>
+    <li>creates its backup folders, <em>Ask Again Later</em> › <em>YouTube Shorts</em> › <em>Final Videos</em>, and
+      inside <em>Final Videos</em> one folder per episode, named after the episode, if they don't already exist;</li>
     <li>uploads finished MP4 video files into <em>Final Videos</em>, and each video's approved English subtitle file
-      (a small .srt text file) into the same folder as that video;</li>
+      (a small .srt text file) into the same folder as that video; once an episode is ready to publish, both are kept
+      together in that episode's folder;</li>
     <li>looks up its own files and folders (name, file ID, size, checksums and folder) to avoid duplicate uploads and to
       confirm each upload arrived complete;</li>
     <li>when its folder layout changes, can move its own backup files into the new folders. This changes only the
