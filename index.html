@@ -24,11 +24,11 @@
 <body>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="muted">Ask Again Later – Studio · Last updated 6 November 2026</p>
+  <p class="muted">Ask Again Later – Studio · Last updated 12 November 2026</p>
 
   <p><strong>Ask Again Later – Studio</strong> is a small personal tool used by the creator of the
     <a href="https://youtube.com/@askagainlatershow">Ask Again Later</a> YouTube channel. It backs up the channel's
-    finished video files to the creator's own Google Drive, uploads the channel's own finished videos to YouTube as
+    finished video files (with their English subtitle files) to the creator's own Google Drive, uploads the channel's own finished videos to YouTube as
     <strong>private</strong> videos, and reads the channel's own YouTube statistics. It is not a public app: it has no user accounts, no sign-up,
     and it is used only by the channel's owner with their own Google account.</p>
 
@@ -42,7 +42,8 @@
   <ul>
     <li>creates its backup folders, <em>Ask Again Later</em> › <em>YouTube Shorts</em> › <em>Final Videos</em>, if they
       don't already exist;</li>
-    <li>uploads finished MP4 video files into <em>Final Videos</em>;</li>
+    <li>uploads finished MP4 video files into <em>Final Videos</em>, and each video's approved English subtitle file
+      (a small .srt text file) into the same folder as that video;</li>
     <li>looks up its own files and folders (name, file ID, size, checksums and folder) to avoid duplicate uploads and to
       confirm each upload arrived complete;</li>
     <li>when its folder layout changes, can move its own backup files into the new folders. This changes only the
@@ -79,8 +80,8 @@
       source code. For the daily statistics refresh, a separate token limited to the read-only permission
       (youtube.readonly) is stored as an encrypted secret of the private repository's automation (GitHub Actions); that
       automated job only reads the channel's own statistics and cannot upload, change or delete videos.</li>
-    <li><strong>Backup records:</strong> for each uploaded video the tool records the Drive file ID, file name, folder
-      name, file size, a SHA-256 checksum, the backup status and the date. These records are kept in the channel's
+    <li><strong>Backup records:</strong> for each uploaded video and subtitle file the tool records the Drive file
+      ID, file name, folder name, file size, a SHA-256 checksum, the backup status and the date. These records are kept in the channel's
       private production repository on GitHub.</li>
     <li><strong>Upload records:</strong> for each private upload the tool records the YouTube video ID, title, privacy
       status, a SHA-256 checksum of the uploaded file, the processing status and the date, in the same private
@@ -88,7 +89,7 @@
     <li><strong>Statistics:</strong> the channel's own YouTube Analytics figures listed above, with the date range they
       cover, in the same private repository. They are kept to compare the channel's videos over time.</li>
     <li><strong>The videos themselves</strong> are stored in the owner's Google Drive and on the owner's YouTube
-      channel.</li>
+      channel; their subtitle files are stored next to them in the owner's Google Drive.</li>
   </ul>
 
   <h2>How long data is kept</h2>
