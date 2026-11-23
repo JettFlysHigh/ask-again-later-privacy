@@ -24,7 +24,7 @@
 <body>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="muted">Ask Again Later – Studio · Last updated 12 November 2026</p>
+  <p class="muted">Ask Again Later – Studio · Last updated 23 November 2026</p>
 
   <p><strong>Ask Again Later – Studio</strong> is a small personal tool used by the creator of the
     <a href="https://youtube.com/@askagainlatershow">Ask Again Later</a> YouTube channel. It backs up the channel's
@@ -77,8 +77,10 @@
   <h2>What is stored, and where</h2>
   <ul>
     <li><strong>Sign-in credentials:</strong> after the owner signs in, Google issues an authorisation token. It is
-      stored privately on the computer or development environment that runs the tool, and is never published or put in
-      source code. For the daily statistics refresh, a separate token limited to the read-only permission
+      stored privately on the computer or development environment that runs the tool: on a personal computer in the
+      operating system's protected credential store (Windows Credential Manager or the macOS Keychain) where one is
+      available, otherwise in a private file in the user's profile; in a cloud development environment only inside that
+      environment. It is never published or put in source code. For the daily statistics refresh, a separate token limited to the read-only permission
       (youtube.readonly) is stored as an encrypted secret of the private repository's automation (GitHub Actions); that
       automated job only reads the channel's own statistics and cannot upload, change or delete videos.</li>
     <li><strong>Backup records:</strong> for each uploaded video and subtitle file the tool records the Drive file
@@ -95,7 +97,8 @@
 
   <h2>How long data is kept</h2>
   <ul>
-    <li><strong>Sign-in credentials</strong> are kept only for the working session that needs them and stop working
+    <li><strong>Sign-in credentials</strong> are kept on a personal computer until the owner signs out or removes them,
+      and in a cloud development environment only for that environment's working session; they stop working
       when access is removed (see below); test-mode sign-ins also expire on their own after about a week. The read-only
       token for the daily statistics refresh is kept until the owner replaces or deletes it, or removes the app's
       access.</li>
